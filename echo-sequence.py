@@ -4,6 +4,7 @@ Sample sever, just echos input plus seq number
 """
 
 import pollengine
+PE = pollengine
 
 # ---
 
@@ -47,15 +48,7 @@ class EchoDriver:
 # ---
 
 ECHO_PORT = 8888
-SERVER_PORTS = set()
-SERVER_PORTS.add( ECHO_PORT )
 
-# ---
-
-PE = pollengine
-
-ECHO_SHELL = EchoDriver()
-
-ENGINE = PE.Engine( port_list = SERVER_PORTS )
-ENGINE.config_server( ECHO_PORT, shell = ECHO_SHELL )
+ENGINE = PE.Engine( port_list = [ ECHO_PORT ] )
+ENGINE.config_server( ECHO_PORT, shell = EchoDriver() )
 ENGINE.run()
