@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Sample sever, just echos input plus seq number
+Sample server, just echos input plus seq number
 """
 
 import pollengine
