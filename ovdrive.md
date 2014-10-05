@@ -77,14 +77,17 @@ replace "7778" in the examples with the port you picked.
 
 To start the server, just run
 
-```ovdrive.py```
+```
+ovdrive.py
+```
 
 in a terminal window.
 
 Then in a different terminal window, connect to the server and try the "show",
 "user", "pass", "seed", "otp" and "drop" commands.
 
-```telnet localhost 7778
+```
+telnet localhost 7778
 Trying 127.0.0.1...
 Connected to localhost.
 Escape character is '^]'.
@@ -161,7 +164,8 @@ lines to the OpenVPN configuration file.
 Just remember to change "7777" to whatever you used if you decided to change
 the "OVDRIVE_PORT" in the "ovdrive.py" script.
 
-```auth-user-pass
+```
+auth-user-pass
 auth-nocache
 auth-retry interact
 
