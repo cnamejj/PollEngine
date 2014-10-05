@@ -55,7 +55,8 @@ app.  Once that works, then you're ready to try driving the connection process w
 
 When you start "ovdrive.py" it will listen on two ports on the "localhost" interface on your system.  The ports are defined in these lines of code:
 
-```ADMIN_PORT = 7778
+```
+ADMIN_PORT = 7778
 OVDRIVE_PORT = 7777
 ```
 
