@@ -44,7 +44,9 @@ etc...
 Whatever's in there, just get it working as delivered first.  Meaning get to
 the point where you can enter the following command:
 
+```
 $ sudo openvpn --config name-of-config-file
+```
 
 and establish a VPN connection by manually entering your usename and password,
 meaning the static password plus the OTP you get from the Google Authenticator
@@ -110,17 +112,12 @@ $
 
 The commands recognized by the admin server are very straightforward.
 
-user XXX - stores the username used for the VPN connection to "XXX"
-
-pass XXX - stores the static component of the compound VPN password
-
-seed XXX - stores the "secret" used in the OTP algorithm
-
-otp - generates the current compound VPN password (static + OTP) 
-
-drop - directs the admin server to drop the connection
-
-quit - stops the "ovdrive.py" server, which will terminate any VPN tunnel
+|user XXX|stores the username used for the VPN connection to "XXX"|
+|pass XXX|stores the static component of the compound VPN password|
+|seed XXX|stores the "secret" used in the OTP algorithm|
+|otp| generates the current compound VPN password (static + OTP)|
+|drop|directs the admin server to drop the connection|
+|quit| stops the "ovdrive.py" server, which will terminate any VPN tunnel|
 
 You can connect back to the server as you like and re-issue commands.  The
 credentials you supply are retained in RAM.  So if connect back to the admin
