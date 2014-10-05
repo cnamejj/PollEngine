@@ -112,12 +112,14 @@ $
 
 The commands recognized by the admin server are very straightforward.
 
-|user XXX|stores the username used for the VPN connection to "XXX"|
-|pass XXX|stores the static component of the compound VPN password|
-|seed XXX|stores the "secret" used in the OTP algorithm|
-|otp| generates the current compound VPN password (static + OTP)|
-|drop|directs the admin server to drop the connection|
-|quit| stops the "ovdrive.py" server, which will terminate any VPN tunnel|
+|Command |Description
+|:---- |:----
+|user XXX |stores the username used for the VPN connection to "XXX"
+|pass XXX |stores the static component of the compound VPN password
+|seed XXX |stores the "secret" used in the OTP algorithm
+|otp |generates the current compound VPN password (static + OTP)
+|drop |directs the admin server to drop the connection
+|quit |stops the "ovdrive.py" server, which will terminate any VPN tunnel
 
 You can connect back to the server as you like and re-issue commands.  The
 credentials you supply are retained in RAM.  So if connect back to the admin
