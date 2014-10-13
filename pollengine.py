@@ -230,11 +230,20 @@ class SocketConn:
 class ServerGizmo:
     """Setup a listening port."""
 
-    def __init__( self, port, shell = ShellNull(), status = dummy_status,
-            s_ip = NO_EXT_IP ):
+    def __init__( self, listen, shell = ShellNull(), status = dummy_status ):
 #        displaymsg( 'dbg:: ServerGizmo init' )
-        self.server_ip = s_ip
-        self.server_port = port
+        try:
+            if len(listen) > 1:
+                __port = listen[0]
+                __ip = listen[1]
+            else:
+                __port = listen
+                __ip = NO_EXT_IP
+        except TypeError:
+            __port = listen
+            __ip = NO_EXT_IP
+        self.server_ip = __ip
+        self.server_port = __port
         self.shell = shell
         self.status_callback = status
         self.conn = SocketConn( self.shell, status = status )
@@ -254,7 +263,7 @@ class Engine:
 
     def __init__( self, server_list = SERVER_SPEC_LIST):
         self.handler = dict()
-        self.port2server = dict()
+        self.listen2server = dict()
         for __spec in server_list:
             try:
                 if len( __spec ) > 1:
@@ -266,18 +275,25 @@ class Engine:
             except TypeError:
                 __port = __spec
                 __ip = NO_EXT_IP
-            self.config_server( __port, s_ip = __ip )
+            self.config_server( (__port, __ip) )
 
-    def config_server( self, port, shell = ShellNull(), status = dummy_status,
-            s_ip = NO_EXT_IP ):
+    def config_server( self, listen, shell = ShellNull(),
+            status = dummy_status ):
         """Add a server or change the shell of one"""
 
         try:
-            __serv = self.port2server[port]
+            if len(listen) > 1:
+                __key = (listen[0], listen[1])
+            else:
+                __key = (listen[0], NO_EXT_IP)
+        except TypeError:
+            __key = (listen, NO_EXT_IP)
+
+        try:
+            __serv = self.listen2server[__key]
         except KeyError:
-            __serv = ServerGizmo( port, shell = shell, status = status,
-                    s_ip = s_ip )
-            self.port2server[port] = __serv
+            __serv = ServerGizmo( __key, shell = shell, status = status )
+            self.listen2server[__key] = __serv
             self.handler[__serv.conn.sock] = __serv.conn
 
         __serv.shell = shell

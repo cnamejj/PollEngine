@@ -255,14 +255,14 @@ NEED[REQ_AUTH] = 'username Auth {user}'
 NEED[REQ_PASS] = 'password Auth {pw}'
 NEED[REQ_SETSTATE] = 'state on'
 
-SERVER_PORT_LIST = ( ADMIN_PORT, OVDRIVE_PORT )
+SERVER_SPEC_LIST = ( (ADMIN_PORT), (OVDRIVE_PORT) )
 
 SHOW_TEMPLATE = 'User: {user}\nPass: {pw}\nSeed: {seed}'
 
 # ---
 
 PE = pollengine
-ENGINE = PE.Engine( server_list = SERVER_PORT_LIST )
+ENGINE = PE.Engine( server_list = SERVER_SPEC_LIST )
 
 OVDATA = OVDriveData()
 OVDATA.user = NO_USER

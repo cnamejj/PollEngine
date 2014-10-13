@@ -47,9 +47,11 @@ class EchoDriver:
 
 # ---
 
-ECHO_PORT = 8888
+ECHO_PORT1 = 8888
+ECHO_PORT2 = 8889
 LOOPBACK = 'localhost'
 
-ENGINE = PE.Engine( server_list = [ (ECHO_PORT, LOOPBACK) ] )
-ENGINE.config_server( ECHO_PORT, shell = EchoDriver )
+ENGINE = PE.Engine( server_list = [ (ECHO_PORT1, LOOPBACK), (ECHO_PORT2, LOOPBACK) ] )
+ENGINE.config_server( (ECHO_PORT1, LOOPBACK), shell = EchoDriver )
+ENGINE.config_server( (ECHO_PORT2, LOOPBACK), shell = EchoDriver )
 ENGINE.run()

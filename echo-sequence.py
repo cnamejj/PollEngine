@@ -47,9 +47,13 @@ class EchoDriver:
 
 # ---
 
-ECHO_PORT = 8888
+ECHO_PORT1 = 8888
+ECHO_PORT2 = 8889
 ANY_IP = '0.0.0.0'
+SERVER1 = (ECHO_PORT1, ANY_IP)
+SERVER2 = (ECHO_PORT2, ANY_IP)
 
-ENGINE = PE.Engine( server_list = [ (ECHO_PORT, ANY_IP) ] )
-ENGINE.config_server( ECHO_PORT, shell = EchoDriver() )
+ENGINE = PE.Engine( server_list = [ SERVER1, SERVER2 ] )
+ENGINE.config_server( SERVER1, shell = EchoDriver() )
+ENGINE.config_server( SERVER2, shell = EchoDriver() )
 ENGINE.run()
