@@ -230,7 +230,8 @@ class SocketConn:
 class ServerGizmo:
     """Setup a listening port."""
 
-    def __init__( self, port, shell = ShellNull(), status = dummy_status, s_ip = NO_EXT_IP ):
+    def __init__( self, port, shell = ShellNull(), status = dummy_status,
+            s_ip = NO_EXT_IP ):
 #        displaymsg( 'dbg:: ServerGizmo init' )
         self.server_ip = s_ip
         self.server_port = port
@@ -267,13 +268,15 @@ class Engine:
                 __ip = NO_EXT_IP
             self.config_server( __port, s_ip = __ip )
 
-    def config_server( self, port, shell = ShellNull(), status = dummy_status, s_ip = NO_EXT_IP ):
+    def config_server( self, port, shell = ShellNull(), status = dummy_status,
+            s_ip = NO_EXT_IP ):
         """Add a server or change the shell of one"""
 
         try:
             __serv = self.port2server[port]
         except KeyError:
-            __serv = ServerGizmo( port, shell = shell, status = status, s_ip = s_ip )
+            __serv = ServerGizmo( port, shell = shell, status = status,
+                    s_ip = s_ip )
             self.port2server[port] = __serv
             self.handler[__serv.conn.sock] = __serv.conn
 
