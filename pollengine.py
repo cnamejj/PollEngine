@@ -4,13 +4,14 @@
 import socket
 import select
 import time
+import inspect
 
 # ---
 
 ADMIN_PORT = 7778
-OVDRIVE_PORT = 7777
+ENGINE_PORT = 7777
 
-SERVER_PORT_LIST = ( ADMIN_PORT, OVDRIVE_PORT )
+SERVER_SPEC_LIST = ( ADMIN_PORT, ENGINE_PORT )
 
 # ---
 
@@ -24,6 +25,7 @@ IS_SESSION = 1
 NO_CLIENT = 'no-client'
 NO_SOCK = 0
 NO_PORT = -1
+NO_EXT_IP = 'localhost'
 
 DO_READ = 0
 DO_WRITE = 1
@@ -156,6 +158,7 @@ class SocketConn:
 
     def __init__( self, shell, status = dummy_status ):
 #        displaymsg( 'dbg:: SocketConn init' )
+        self.server_ip = NO_EXT_IP
         self.server_port = NO_PORT
         self.client = NO_CLIENT
         self.sock = NO_SOCK
@@ -166,7 +169,10 @@ class SocketConn:
         self.elist = dict()
         self.elist[DO_READ] = True
         self.elist[DO_WRITE] = False
-        self.shell = shell
+        if inspect.isclass( shell ):
+            self.shell = shell()
+        else:
+            self.shell = shell
         self.req = ''
         self.status_callback = status
 
@@ -224,17 +230,19 @@ class SocketConn:
 class ServerGizmo:
     """Setup a listening port."""
 
-    def __init__( self, port, shell = ShellNull(), status = dummy_status ):
+    def __init__( self, port, shell = ShellNull(), status = dummy_status, s_ip = NO_EXT_IP ):
 #        displaymsg( 'dbg:: ServerGizmo init' )
+        self.server_ip = s_ip
         self.server_port = port
         self.shell = shell
         self.status_callback = status
         self.conn = SocketConn( self.shell, status = status )
+        self.conn.server_ip = self.server_ip
         self.conn.server_port = self.server_port
         self.conn.sock = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
         self.conn.sock.setblocking( 0 )
         self.conn.sock.setsockopt( socket.SOL_SOCKET, socket.SO_REUSEADDR, 1 )
-        self.conn.sock.bind( ('localhost', self.server_port) )
+        self.conn.sock.bind( (self.server_ip, self.server_port) )
         self.conn.sock.listen( 5 )
         self.conn.sock_open = True
 
@@ -243,24 +251,34 @@ class ServerGizmo:
 class Engine:
     """Skeleton for a simple server"""
 
-    def __init__( self, port_list = SERVER_PORT_LIST):
+    def __init__( self, server_list = SERVER_SPEC_LIST):
         self.handler = dict()
         self.port2server = dict()
-        for __port in port_list:
-            self.config_server( __port )
+        for __spec in server_list:
+            try:
+                if len( __spec ) > 1:
+                    __port = __spec[0]
+                    __ip = __spec[1]
+                else:
+                    __port = __spec
+                    __ip = NO_EXT_IP
+            except TypeError:
+                __port = __spec
+                __ip = NO_EXT_IP
+            self.config_server( __port, s_ip = __ip )
 
-    def config_server( self, port, shell = ShellNull(), status = dummy_status ):
+    def config_server( self, port, shell = ShellNull(), status = dummy_status, s_ip = NO_EXT_IP ):
         """Add a server or change the shell of one"""
 
         try:
             __serv = self.port2server[port]
         except KeyError:
-            __serv = ServerGizmo( port, shell = shell, status = status )
+            __serv = ServerGizmo( port, shell = shell, status = status, s_ip = s_ip )
             self.port2server[port] = __serv
             self.handler[__serv.conn.sock] = __serv.conn
-            
+
         __serv.shell = shell
-        __serv.conn.shell = shell
+        __serv.conn.shell = __serv.shell
         __serv.status_callback = status
         __serv.conn.status_callback = status
 
@@ -333,6 +351,7 @@ class Engine:
                     __cli.sock = __sock
                     __cli.client = __client
                     __cli.type = IS_SESSION
+                    __cli.server_ip = __sess.server_ip
                     __cli.server_port = __sess.server_port
                     __cli.sock_open = True
                     __active_sockets.add( __cli )

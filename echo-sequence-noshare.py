@@ -48,8 +48,8 @@ class EchoDriver:
 # ---
 
 ECHO_PORT = 8888
-ANY_IP = '0.0.0.0'
+LOOPBACK = 'localhost'
 
-ENGINE = PE.Engine( server_list = [ (ECHO_PORT, ANY_IP) ] )
-ENGINE.config_server( ECHO_PORT, shell = EchoDriver() )
+ENGINE = PE.Engine( server_list = [ (ECHO_PORT, LOOPBACK) ] )
+ENGINE.config_server( ECHO_PORT, shell = EchoDriver )
 ENGINE.run()

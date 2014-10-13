@@ -262,7 +262,7 @@ SHOW_TEMPLATE = 'User: {user}\nPass: {pw}\nSeed: {seed}'
 # ---
 
 PE = pollengine
-ENGINE = PE.Engine( port_list = SERVER_PORT_LIST )
+ENGINE = PE.Engine( server_list = SERVER_PORT_LIST )
 
 OVDATA = OVDriveData()
 OVDATA.user = NO_USER
